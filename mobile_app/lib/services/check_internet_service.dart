@@ -8,6 +8,8 @@ import 'package:mobile_app/service_locator.dart';
 import 'package:mobile_app/services/navigation_service.dart';
 import 'package:mobile_app/utils/screen_util.dart';
 
+/// [CheckInternetService] checks the internet connection status of the device.
+/// It can show a dialog or a toast message if the device gets disconnected from the internet.
 class CheckInternetService {
   final NavigationService _navigationService = locator<NavigationService>();
 
@@ -16,6 +18,12 @@ class CheckInternetService {
   var contentMessage = "Unknown";
   bool isShowingDialog = false;
 
+  /// Show a dialog with the provided [title] and [content].
+  /// The dialog is non-dismissible and contains the app logo.
+  ///
+  /// [title] is the title of the dialog.
+  /// [content] is the content message of the dialog.
+  /// [context] is the BuildContext where the dialog will be shown.
   void _showDialog(
       {required String title,
       required String content,
@@ -43,6 +51,12 @@ class CheckInternetService {
         });
   }
 
+  /// Check the internet connection status of the device.
+  /// If the device is disconnected from the internet, it will show a dialog or a toast message
+  /// depending on the [useDialog] parameter.
+  ///
+  /// [useDialog] decides if a dialog (if true) or a toast (if false) will be shown when disconnected.
+  /// The default value of [useDialog] is false.
   checkConnection({bool useDialog = false}) async {
     listener = InternetConnectionChecker().onStatusChange.listen((status) {
       if (status == InternetConnectionStatus.disconnected) {
@@ -72,6 +86,11 @@ class CheckInternetService {
     return await InternetConnectionChecker().connectionStatus;
   }
 
+  /// Show a toast with the provided [title] and [content].
+  ///
+  /// [title] is the title of the toast.
+  /// [content] is the content message of the toast.
+  /// [context] is the BuildContext where the toast will be shown.
   void _showToast(
       {String? title, String? content, required BuildContext context}) {
     Flushbar(

@@ -8,11 +8,15 @@ import 'package:mobile_app/services/alert_service.dart';
 import 'package:mobile_app/services/navigation_service.dart';
 import 'package:ndialog/ndialog.dart';
 
+/// The `DialogService` class provides methods for displaying various types of dialogs and alerts, as well as progress indicators.
+/// It uses the `NavigationService` to get the current context for displaying these dialogs.
+/// This service also includes options to customize the appearance and behavior of the dialogs.
 class DialogService {
   final NavigationService _navigationService = locator<NavigationService>();
   final AlertService _alertService = AlertService();
   ProgressDialog? _progressDialog;
 
+  /// Show an edge alert with a specified message and alert type, with optional duration in seconds.
   void showEdgeAlert(
       {required String message,
       required AlertType type,
@@ -29,6 +33,7 @@ class DialogService {
     }
   }
 
+  /// Display a progress dialog with optional title, message, and dismissible settings.
   void showProgress(
       {String title = 'Loading',
       String message = 'Please Wait.....',
@@ -62,12 +67,14 @@ class DialogService {
     _progressDialog!.show();
   }
 
+  /// Close the current progress dialog, if it exists.
   void closeProgress() {
     if (_progressDialog != null) {
       _progressDialog!.dismiss();
     }
   }
 
+  /// Show a confirmation dialog with a specified message and optional positive/negative responses.
   Future<bool> showConfirmationDialog(
     String message, {
     String positiveResponse = "Yes",
@@ -112,6 +119,7 @@ class DialogService {
     return result;
   }
 
+  /// Show a decision dialog with optional title, message, note, positive/negative responses and their corresponding styles.
   Future<bool> showDecisionDialog({
     String title = 'Alert',
     String message = 'Are you sure the information provided is correct ?',
@@ -175,6 +183,7 @@ class DialogService {
     return result;
   }
 
+  /// Show an accept decision dialog with optional title, message, positive/negative responses.
   Future<bool> showAcceptDecisionDialog({
     String title = 'Alert',
     String message = 'Are you sure the information provided is correct ?',
@@ -231,6 +240,7 @@ class DialogService {
     return result;
   }
 
+  /// Show a generic confirmation dialog with a specified action on acceptance, and optional title and message.
   Future<void> showGenericConfirmationDialog({
     required Function onAccept,
     String title = 'Alert',
@@ -267,6 +277,7 @@ class DialogService {
     );
   }
 
+  /// Show an alert dialog with optional title and message.
   Future<void> showAlertDialog(
       {String title = 'Alert',
       String message = 'Please provide all required data!!'}) async {
@@ -289,6 +300,7 @@ class DialogService {
     );
   }
 
+  /// Show a default error dialog with optional title, message, and an action on support button click.
   Future<void> showDefaultErrorDialog(
       {String title = 'Error',
       String message = AppString.defaultRequestErrorMessage,
@@ -333,6 +345,7 @@ class DialogService {
     );
   }
 
+  /// Show a generic dialog with specified title, content, and options, along with optional title/content text styles, content bold, and barrier dismissible settings.
   Future<void> showGenericDialog({
     required String title,
     required String? content,
@@ -368,6 +381,7 @@ class DialogService {
     );
   }
 
+  /// Show an options dialog with specified title, content, and dialog options, along with optional title/content text styles, content bold, and barrier dismissible settings.
   Future<void> showOptionsDialog({
     required String title,
     required String? content,
@@ -439,6 +453,7 @@ class DialogService {
     );
   }
 
+  /// Show a non dismissible dialog with specified title, content, and options, along with optional title/content text styles and content bold settings.
   Future<void> showNonDismissibleDialog({
     required String title,
     required String content,
