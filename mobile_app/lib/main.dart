@@ -9,15 +9,21 @@ import 'package:mobile_app/views/app_base_view_model.dart';
 import 'package:mobile_app/views/start_up/start_up_view.dart';
 import 'package:provider/provider.dart';
 
+/// Main function, the entry point of the app
 void main() async {
+  // Ensure binding exist before running the app
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Set up service locator
   await setUpLocator();
-  /*runApp(const MyApp());*/
+
+  // Set the preferred orientations and then run the app
   await SystemChrome.setPreferredOrientations(<DeviceOrientation>[
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown
   ]).then(
-        (_) {
+    (_) {
+      // Set system UI overlay style and then run the app
       SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
         // For Android
@@ -25,26 +31,31 @@ void main() async {
         // For iOS.
         statusBarBrightness: Brightness.light,
       ));
+      // Run the app
       return runApp(const MyApp());
     },
-  )
+  );
 }
 
+/// MyApp widget is the root of the app
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Set preferred orientations
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+    // Return MaterialApp widget
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: AppString.title,
       color: Colors.white,
       theme: AppTheme.defaultTheme(),
       home: ChangeNotifierProvider(
+        // Provide AppBaseViewModel to widgets that are descendants of this Provider.
         create: (context) => AppBaseViewModel(),
         child: const StartUpView(),
       ),
