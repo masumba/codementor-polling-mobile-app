@@ -1,10 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:mobile_app/views/app_base_view_model.dart';
 
-class LoginViewModel extends StatelessWidget {
-  const LoginViewModel({Key key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
+class LoginViewModel extends AppBaseViewModel {
+  Future<void> init() async {}
 }

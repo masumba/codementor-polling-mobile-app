@@ -1,5 +1,6 @@
 import 'dart:developer' as developer;
 import 'package:get_it/get_it.dart';
+import 'package:mobile_app/services/application_config_service.dart';
 import 'package:mobile_app/services/dialog_service.dart';
 import 'package:mobile_app/services/navigation_service.dart';
 import 'package:mobile_app/services/package_info_service.dart';
@@ -19,6 +20,7 @@ Future<void> setUpLocator() async {
   locator.registerLazySingleton(() => NavigationService());
   locator.registerLazySingleton(() => PackageInfoService());
   locator.registerLazySingleton(() => DialogService());
+  locator.registerLazySingleton(() => ApplicationConfigService());
 
   /// Register a factory for the AppBaseViewModel. GetIt will create a new instance
   /// every time this type is requested.
