@@ -113,6 +113,14 @@ dependencies:
   flutter_feather_icons: ^2.0.0+1
   #https://pub.dev/packages/uuid
   uuid: ^3.0.6
+  #https://pub.dev/packages/firebase_core
+  firebase_core: ^2.13.0
+  #https://pub.dev/packages/firebase_auth
+  firebase_auth: ^4.6.1
+  #https://pub.dev/packages/firebase_database
+  firebase_database: ^10.2.1
+  #https://pub.dev/packages/cloud_firestore/install
+  cloud_firestore: ^4.7.1
 
 dev_dependencies:
   flutter_test:

@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile_app/constants/app_string.dart';
@@ -13,6 +14,8 @@ import 'package:provider/provider.dart';
 void main() async {
   // Ensure binding exist before running the app
   WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp();
 
   // Set up service locator
   await setUpLocator();

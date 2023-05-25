@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
+import 'package:mobile_app/constants/route_names.dart';
 import 'package:mobile_app/service_locator.dart';
 import 'package:mobile_app/services/dialog_service.dart';
 import 'package:mobile_app/services/navigation_service.dart';
@@ -29,5 +30,13 @@ class AppBaseViewModel extends ChangeNotifier {
     appVersion =
         '${_packageInfoService.appVersion}.${_packageInfoService.buildVersion}';
     notifyListeners();
+  }
+
+  void refreshListeners() {
+    notifyListeners();
+  }
+
+  navigateToLogin() {
+    _navigationService.navigateToWithNoBack(AppRoute.loginViewRoute);
   }
 }
