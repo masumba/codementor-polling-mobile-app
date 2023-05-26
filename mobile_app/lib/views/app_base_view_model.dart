@@ -2,14 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:mobile_app/constants/route_names.dart';
 import 'package:mobile_app/service_locator.dart';
+import 'package:mobile_app/services/authentication_service.dart';
 import 'package:mobile_app/services/dialog_service.dart';
 import 'package:mobile_app/services/navigation_service.dart';
 import 'package:mobile_app/services/package_info_service.dart';
+import 'package:mobile_app/widgets/app/src/app_container_action.dart';
 import 'package:uuid/uuid.dart';
 
 class AppBaseViewModel extends ChangeNotifier {
   final NavigationService _navigationService = locator<NavigationService>();
   final PackageInfoService _packageInfoService = locator<PackageInfoService>();
+  final AuthenticationService authenticationService =
+      locator<AuthenticationService>();
   final DialogService dialogService = locator<DialogService>();
   final Logger logger = Logger();
   final Uuid uuid = const Uuid();
@@ -36,7 +40,56 @@ class AppBaseViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  navigateToLogin() {
+  navigateToHomeView({bool clearBackStack = true}) {
+    if (!clearBackStack) {
+      _navigationService.navigateTo(AppRoute.homeViewRoute);
+    } else {
+      _navigationService.navigateToWithNoBack(AppRoute.homeViewRoute);
+    }
+  }
+
+  navigateToLoginView() {
     _navigationService.navigateToWithNoBack(AppRoute.loginViewRoute);
+  }
+
+  navigateToRegisterView() {
+    _navigationService.navigateTo(AppRoute.registerViewRoute);
+  }
+
+  navigateToForgotPasswordView() {
+    _navigationService.navigateTo(AppRoute.forgotPasswordViewRoute);
+  }
+
+  List<AppContainerAction> menuActions() {
+    List<AppContainerAction> actions = [];
+
+    actions.add(
+      AppContainerAction(
+        reference: uuid.v1(),
+        title: 'Home',
+        onClick: () {
+          navigateToHomeView(clearBackStack: false);
+        },
+      ),
+    );
+
+    actions.add(
+      AppContainerAction(
+        reference: uuid.v1(),
+        title: 'Logout',
+        onClick: () {
+          dialogService
+              .showDecisionDialog(
+                  title: 'Logout', message: 'Are you sure you want to logout?')
+              .then((value) {
+            if (value) {
+              navigateToLoginView();
+            }
+          });
+        },
+      ),
+    );
+
+    return actions;
   }
 }

@@ -1,29 +1,29 @@
+import 'package:flutter/material.dart';
 import 'package:mobile_app/services/alert_service.dart';
 import 'package:mobile_app/views/app_base_view_model.dart';
 
-class LoginViewModel extends AppBaseViewModel {
-  Future<void> init() async {
-    authenticationService.logout();
-  }
+class ForgotPasswordViewModel extends AppBaseViewModel {
+  Future<void> init() async {}
 
-  Future<void> signIn({
+  Future<void> resetPassword({
     required String email,
-    required String password,
   }) async {
     dialogService.showProgress();
     try {
-      var response = await authenticationService.loginWithEmail(
-          email: email, password: password);
+      var response = await authenticationService.resetPassword(
+        email: email,
+      );
       dialogService.closeProgress();
-      if (response.success && response.payload != null) {
+      if (response.success) {
         dialogService.showEdgeAlert(
-          message: 'Successfully logged in with $email.',
+          message:
+              response.message ?? 'Successfully sent email link to $email.',
           type: AlertType.success,
         );
-        navigateToHomeView();
+        navigateToLoginView();
       } else {
         dialogService.showEdgeAlert(
-          message: response.message ?? 'Failed to login account.',
+          message: response.message ?? 'Failed to generate reset link.',
           type: AlertType.error,
           durationInSec: 10,
         );

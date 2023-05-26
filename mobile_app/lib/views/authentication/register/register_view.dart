@@ -3,7 +3,7 @@ import 'package:mobile_app/constants/app_color.dart';
 import 'package:mobile_app/extensions/string_extension.dart';
 import 'package:mobile_app/utils/screen_util.dart';
 import 'package:mobile_app/utils/validator.dart';
-import 'package:mobile_app/views/authentication/login/login_view_model.dart';
+import 'package:mobile_app/views/authentication/register/register_view_model.dart';
 import 'package:mobile_app/widgets/app/app_container.dart';
 import 'package:mobile_app/widgets/app_logo.dart';
 import 'package:mobile_app/widgets/busy_button.dart';
@@ -12,24 +12,25 @@ import 'package:mobile_app/widgets/input_field.dart';
 import 'package:mobile_app/widgets/text_link.dart';
 import 'package:stacked/stacked.dart';
 
-class LoginView extends StatefulWidget {
-  const LoginView({Key? key}) : super(key: key);
+class RegisterView extends StatefulWidget {
+  const RegisterView({Key? key}) : super(key: key);
 
   @override
-  State<LoginView> createState() => _LoginViewState();
+  State<RegisterView> createState() => _RegisterViewState();
 }
 
-class _LoginViewState extends State<LoginView> {
+class _RegisterViewState extends State<RegisterView> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _passwordConfirmController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<LoginViewModel>.reactive(
+    return ViewModelBuilder<RegisterViewModel>.reactive(
       onViewModelReady: (model) => model.init(),
-      viewModelBuilder: () => LoginViewModel(),
+      viewModelBuilder: () => RegisterViewModel(),
       builder: (context, model, child) => AppContainer(
-        appBarTitle: 'Login',
+        appBarTitle: 'Register',
         centerTitle: true,
         containerBody: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -45,7 +46,7 @@ class _LoginViewState extends State<LoginView> {
                   child: FormFieldBlock(
                     children: [
                       FormFieldWidget(
-                        title: 'Email Address',
+                        title: 'Email Address *',
                         child: InputField(
                           textInputType: TextInputType.emailAddress,
                           validator: (value) {
@@ -63,11 +64,15 @@ class _LoginViewState extends State<LoginView> {
                         ),
                       ),
                       FormFieldWidget(
-                        title: 'Password',
+                        title: 'Password *',
                         child: InputField(
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter your password.';
+                            }
+
+                            if (value.length < 8) {
+                              return 'Please enter more than 8 or more characters.';
                             }
                             return null;
                           },
@@ -77,14 +82,34 @@ class _LoginViewState extends State<LoginView> {
                         ),
                       ),
                       FormFieldWidget(
+                        title: 'Confirm Password *',
+                        child: InputField(
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your password match.';
+                            }
+
+                            if (value.trim() !=
+                                _passwordController.text.trim()) {
+                              return 'Please match passwords provided.';
+                            }
+                            return null;
+                          },
+                          placeholder: 'Confirm Password',
+                          password: true,
+                          controller: _passwordConfirmController,
+                          textInputAction: TextInputAction.done,
+                        ),
+                      ),
+                      FormFieldWidget(
                         title: 'Submit',
                         overrideWidget: true,
                         child: BusyButton(
-                          title: 'Sign In',
+                          title: 'Sign Up',
                           busy: model.isButtonBusy,
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
-                              model.signIn(
+                              model.signUp(
                                 email: _emailController.value.text,
                                 password: _passwordController.value.text,
                               );
@@ -96,23 +121,11 @@ class _LoginViewState extends State<LoginView> {
                   ),
                 ),
               ),
-              ScreenUtil.verticalSpaceMedium,
-              TextLink(
-                text: 'Forgot Password? Click Here To Request OTP',
-                onPressed: () {
-                  model.navigateToForgotPasswordView();
-                },
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontWeight: FontWeight.w700,
-                  color: AppColor.primaryColorDark.toColor(),
-                ),
-              ),
               ScreenUtil.verticalSpaceLarge,
               TextLink(
-                text: 'Don\'t have an account? Click Here To Register',
+                text: 'Already have an account? Click Here To Login',
                 onPressed: () {
-                  model.navigateToRegisterView();
+                  model.navigateToLoginView();
                 },
                 textAlign: TextAlign.center,
                 style: TextStyle(

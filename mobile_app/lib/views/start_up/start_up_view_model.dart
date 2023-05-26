@@ -16,7 +16,7 @@ class StartUpViewModel extends AppBaseViewModel {
       await _config.getSharedPreferences();
       //TODO navigate to login
       //TODO add logic to check state
-      navigateToLogin();
+      navigateToLoginView();
     } catch (e, s) {
       showLoader = false;
       notifyListeners();
