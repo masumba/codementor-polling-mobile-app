@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:mobile_app/constants/route_names.dart';
 import 'package:mobile_app/service_locator.dart';
+import 'package:mobile_app/services/authentication_service.dart';
 import 'package:mobile_app/services/dialog_service.dart';
 import 'package:mobile_app/services/navigation_service.dart';
 import 'package:mobile_app/services/package_info_service.dart';
@@ -10,6 +11,8 @@ import 'package:uuid/uuid.dart';
 class AppBaseViewModel extends ChangeNotifier {
   final NavigationService _navigationService = locator<NavigationService>();
   final PackageInfoService _packageInfoService = locator<PackageInfoService>();
+  final AuthenticationService authenticationService =
+      locator<AuthenticationService>();
   final DialogService dialogService = locator<DialogService>();
   final Logger logger = Logger();
   final Uuid uuid = const Uuid();
