@@ -8,6 +8,8 @@ class AppTheme {
   static ThemeData defaultTheme() {
     return ThemeData.light().copyWith(
       primaryColor: AppColor.primaryColor.toColor(),
+      primaryColorDark: AppColor.primaryColorDark.toColor(),
+      primaryColorLight: AppColor.primaryColorLight.toColor(),
       useMaterial3: true,
       colorScheme: ColorScheme.fromSeed(
         seedColor: AppColor.primaryColor.toColor(),

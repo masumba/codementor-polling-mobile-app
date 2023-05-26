@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/constants/route_names.dart';
+import 'package:mobile_app/views/authentication/forgot_password/forgot_password_view.dart';
 import 'package:mobile_app/views/authentication/login/login_view.dart';
+import 'package:mobile_app/views/authentication/register/register_view.dart';
+import 'package:mobile_app/views/home/home_view.dart';
 
 /// This function is triggered every time when calling Navigator.pushNamed.
 /// It returns a Route depending on the routeName passed in the settings.
@@ -16,6 +19,21 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _getPageRoute(
         routeName: settings.name,
         viewToShow: const LoginView(),
+      );
+    case AppRoute.registerViewRoute:
+      return _getPageRoute(
+        routeName: settings.name,
+        viewToShow: const RegisterView(),
+      );
+    case AppRoute.forgotPasswordViewRoute:
+      return _getPageRoute(
+        routeName: settings.name,
+        viewToShow: const ForgotPasswordView(),
+      );
+    case AppRoute.homeViewRoute:
+      return _getPageRoute(
+        routeName: settings.name,
+        viewToShow: const HomeView(),
       );
     // For all other route names
     default:

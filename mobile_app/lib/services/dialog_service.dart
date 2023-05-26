@@ -45,7 +45,7 @@ class DialogService {
       _navigationService.navigationKey.currentContext!,
       dialogStyle: DialogStyle(
           borderRadius: BorderRadius.circular(12.0),
-          backgroundColor: AppColor.neutralColor.toColor(),
+          backgroundColor: AppColor.primaryColorDark.toColor(),
           titleTextStyle: const TextStyle(color: Colors.white),
           contentTextStyle: const TextStyle(color: Colors.white)),
       blur: 0,

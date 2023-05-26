@@ -10,12 +10,12 @@ class AuthenticationService {
   Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
 
   Future<ApiPayload<UserCredential?>> loginWithEmail(
-      {required email, required pass}) async {
+      {required email, required password}) async {
     ApiPayload<UserCredential?> apiPayload = ApiPayload<UserCredential?>();
     apiPayload.success = false;
     try {
       final UserCredential userCredential = await _firebaseAuth
-          .signInWithEmailAndPassword(email: email, password: pass);
+          .signInWithEmailAndPassword(email: email, password: password);
 
       apiPayload.payload = userCredential;
       apiPayload.success = userCredential.user != null;
@@ -96,12 +96,23 @@ class AuthenticationService {
     return user?.uid;
   }
 
-  Future<bool> resetPassword({required String email}) async {
+  Future<ApiPayload> resetPassword({required String email}) async {
+    ApiPayload apiPayload = ApiPayload();
+    apiPayload.success = false;
     try {
       await _firebaseAuth.sendPasswordResetEmail(email: email);
-      return true;
-    } catch (e) {
-      return false;
+      apiPayload.message = "Password reset link sent to email $email";
+      apiPayload.success = true;
+      return apiPayload;
+    } on FirebaseAuthException catch (exception) {
+      _logger.e('Exception @resetPassword: $exception');
+      apiPayload.message =
+          FirebaseAuthExceptionHandler.generateExceptionMessage(
+              exception: exception);
+    } catch (exception, stacktrace) {
+      _logger.e('Exception @resetPassword: $exception');
+      _logger.e(stacktrace);
     }
+    return apiPayload;
   }
 }
