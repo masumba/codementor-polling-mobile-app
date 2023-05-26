@@ -19,18 +19,18 @@ class AppTheme {
       ),
       textTheme:
           GoogleFonts.dmSansTextTheme().apply(displayColor: Colors.black),
-      appBarTheme: const AppBarTheme(
+      appBarTheme: AppBarTheme(
         systemOverlayStyle: SystemUiOverlayStyle(
-          statusBarColor: Colors.transparent, // For Android
-          statusBarIconBrightness: Brightness.dark,
+          statusBarColor: AppColor.primaryColorDark.toColor(), // For Android
+          statusBarIconBrightness: Brightness.light,
           // For iOS.
           statusBarBrightness: Brightness.light,
         ),
-        backgroundColor: Colors.white,
-        iconTheme: IconThemeData(color: Colors.black),
+        backgroundColor: AppColor.primaryColor.toColor(),
+        iconTheme: const IconThemeData(color: Colors.white),
         centerTitle: true,
-        titleTextStyle: TextStyle(
-          color: Colors.black,
+        titleTextStyle: const TextStyle(
+          color: Colors.white,
         ),
       ),
       listTileTheme: const ListTileThemeData(

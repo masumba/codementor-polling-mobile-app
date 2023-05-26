@@ -33,6 +33,11 @@ class AppContainer extends StatefulWidget {
   final List<Widget>? persistentFooterButtons;
   final Widget? appBarActionButton;
 
+  /// The color of the [Material] widget that underlies the entire Scaffold.
+  ///
+  /// The theme's [ThemeData.scaffoldBackgroundColor] by default.
+  final Color? backgroundColor;
+
   const AppContainer({
     Key? key,
     required this.containerBody,
@@ -45,6 +50,7 @@ class AppContainer extends StatefulWidget {
     this.bottomNavBar,
     this.appBarBottom,
     this.appBarSubTitle,
+    this.backgroundColor,
     this.menuActions,
     this.persistentFooterButtons,
     this.centerTitle = false,
@@ -120,16 +126,12 @@ class _AppContainerState extends State<AppContainer> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor.neutralColor.toColor(),
+      backgroundColor: widget.backgroundColor,
       appBar: widget.showAppBar
           ? AppBar(
               centerTitle: widget.centerTitle,
               elevation: 1,
               bottom: widget.appBarBottom,
-              iconTheme: IconThemeData(
-                color: AppColor.primaryColor.toColor(),
-              ),
-              backgroundColor: AppColor.tertiaryColor.toColor(),
               title: widget.useLogo
                   ? Image.asset(
                       AppImage.logo,
@@ -145,15 +147,24 @@ class _AppContainerState extends State<AppContainer> {
                               ? widget.appBarTitle.toUpperCase()
                               : widget.appBarTitle.toUpperCase(),
                           minFontSize: 10,
-                          style: SharedStyleUtil.appBarTitleTextStyle
-                              .copyWith(color: Colors.black),
+                          style: SharedStyleUtil.appBarTitleTextStyle.copyWith(
+                            color: Theme.of(context)
+                                .appBarTheme
+                                .titleTextStyle
+                                ?.color,
+                          ),
                         ),
                         if (widget.appBarSubTitle != null)
                           AutoSizeText(
                             widget.appBarSubTitle?.toTitleCase() ?? '',
                             minFontSize: 4,
                             style: SharedStyleUtil.appBarSubTitleTextStyle
-                                .copyWith(color: Colors.black),
+                                .copyWith(
+                              color: Theme.of(context)
+                                  .appBarTheme
+                                  .titleTextStyle
+                                  ?.color,
+                            ),
                           )
                       ],
                     ),
