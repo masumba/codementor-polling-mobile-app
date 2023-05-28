@@ -77,4 +77,18 @@ class ImagePostService {
       );
     }
   }
+
+  // Stream of image and description updates
+  Stream<DocumentSnapshot<Map<String, dynamic>>>
+      getImageAndDescriptionUpdates() {
+    // Make sure the user is logged in
+    var authUser = _authenticationService.getUser();
+    if (authUser != null) {
+      String userId = authUser.uid;
+
+      return _fireStore.collection("pollingImages").doc(userId).snapshots();
+    } else {
+      throw ResourceMissingException("User not logged in");
+    }
+  }
 }
