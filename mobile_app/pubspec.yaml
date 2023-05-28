@@ -66,7 +66,7 @@ dependencies:
   #https://pub.dev/packages/shared_preferences
   shared_preferences: ^2.0.15
   #https://pub.dev/packages/image_picker/install
-  image_picker: ^0.8.6
+  image_picker: ^0.8.7+5
   #https://pub.dev/packages/image_picker_platform_interface/install
   image_picker_platform_interface: ^2.6.2
   #https://pub.dev/packages/flutter_plugin_android_lifecycle/install
@@ -119,8 +119,12 @@ dependencies:
   firebase_auth: ^4.6.1
   #https://pub.dev/packages/firebase_database
   firebase_database: ^10.2.1
-  #https://pub.dev/packages/cloud_firestore/install
+  #https://pub.dev/packages/cloud_firestore
   cloud_firestore: ^4.7.1
+  #https://pub.dev/packages/dotted_border
+  dotted_border: ^2.0.0+3
+  #https://pub.dev/packages/line_awesome_flutter
+  line_awesome_flutter: ^2.0.0
 
 dev_dependencies:
   flutter_test:

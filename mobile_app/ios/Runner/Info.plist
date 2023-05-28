@@ -47,5 +47,13 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+    <string>This app requires access to the camera for required inspection and document images upload.</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>This app requires access to the microphone when recording videos.</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>This app requires access to the photo library for required inspection and document images upload.</string>
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>My PICZ would like to save photos from the app to your gallery.</string>
 </dict>
 </plist>

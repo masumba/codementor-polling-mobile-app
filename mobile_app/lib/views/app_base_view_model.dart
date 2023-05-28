@@ -56,6 +56,10 @@ class AppBaseViewModel extends ChangeNotifier {
     _navigationService.navigateTo(AppRoute.registerViewRoute);
   }
 
+  navigateToImagePostView() {
+    _navigationService.navigateTo(AppRoute.imagePostViewRoute);
+  }
+
   navigateToForgotPasswordView() {
     _navigationService.navigateTo(AppRoute.forgotPasswordViewRoute);
   }

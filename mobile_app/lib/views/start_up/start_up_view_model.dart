@@ -14,9 +14,13 @@ class StartUpViewModel extends AppBaseViewModel {
       appVersionNumber = 'Version: $appVersion';
       notifyListeners();
       await _config.getSharedPreferences();
-      //TODO navigate to login
-      //TODO add logic to check state
-      navigateToLoginView();
+      await authenticationService.isUserLoggedIn().then((isLoggedIn) {
+        if (isLoggedIn) {
+          navigateToHomeView();
+        } else {
+          navigateToLoginView();
+        }
+      });
     } catch (e, s) {
       showLoader = false;
       notifyListeners();
