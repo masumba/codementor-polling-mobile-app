@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/constants/app_color.dart';
+import 'package:mobile_app/constants/app_string.dart';
 import 'package:mobile_app/extensions/string_extension.dart';
 import 'package:mobile_app/views/home/home_view_model.dart';
 import 'package:mobile_app/views/home/tabs/image_post_viewer_tab.dart';
@@ -16,8 +17,8 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   final List<Widget> _screens = [
-    ImagePostViewerTab(),
-    MyImagePostTab(),
+    const ImagePostViewerTab(),
+    const MyImagePostTab(),
   ];
 
   @override
@@ -26,7 +27,7 @@ class _HomeViewState extends State<HomeView> {
       onViewModelReady: (model) => model.init(),
       viewModelBuilder: () => HomeViewModel(),
       builder: (context, model, child) => AppContainer(
-        appBarTitle: 'Home',
+        appBarTitle: AppString.title,
         centerTitle: true,
         menuActions: model.menuActions(),
         containerBody: _screens[model.selectedTabIndexHomeView],
