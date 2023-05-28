@@ -50,6 +50,10 @@ class AuthenticationService {
     return user != null;
   }
 
+  User? getUser() {
+    return _firebaseAuth.currentUser;
+  }
+
   Future<void> logout() async {
     _firebaseAuth.signOut();
   }

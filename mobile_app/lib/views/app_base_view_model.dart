@@ -72,7 +72,7 @@ class AppBaseViewModel extends ChangeNotifier {
         reference: uuid.v1(),
         title: 'Home',
         onClick: () {
-          navigateToHomeView(clearBackStack: false);
+          navigateToHomeView();
         },
       ),
     );
