@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app/constants/app_color.dart';
+import 'package:mobile_app/extensions/string_extension.dart';
 import 'package:mobile_app/views/home/home_view_model.dart';
 import 'package:mobile_app/widgets/app/app_container.dart';
 import 'package:stacked/stacked.dart';
@@ -21,6 +23,16 @@ class _HomeViewState extends State<HomeView> {
         centerTitle: true,
         menuActions: model.menuActions(),
         containerBody: Placeholder(),
+        fab: FloatingActionButton(
+          backgroundColor: AppColor.primaryColorDark.toColor(),
+          onPressed: () async {
+            model.navigateToImagePostView();
+          },
+          child: const Icon(
+            Icons.add_a_photo,
+            color: Colors.white,
+          ),
+        ),
       ),
     );
   }

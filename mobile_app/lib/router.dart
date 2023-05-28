@@ -4,6 +4,7 @@ import 'package:mobile_app/views/authentication/forgot_password/forgot_password_
 import 'package:mobile_app/views/authentication/login/login_view.dart';
 import 'package:mobile_app/views/authentication/register/register_view.dart';
 import 'package:mobile_app/views/home/home_view.dart';
+import 'package:mobile_app/views/posts/image_post_view.dart';
 
 /// This function is triggered every time when calling Navigator.pushNamed.
 /// It returns a Route depending on the routeName passed in the settings.
@@ -24,6 +25,11 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _getPageRoute(
         routeName: settings.name,
         viewToShow: const RegisterView(),
+      );
+    case AppRoute.imagePostViewRoute:
+      return _getPageRoute(
+        routeName: settings.name,
+        viewToShow: const ImagePostView(),
       );
     case AppRoute.forgotPasswordViewRoute:
       return _getPageRoute(

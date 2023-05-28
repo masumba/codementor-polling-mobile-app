@@ -119,8 +119,12 @@ dependencies:
   firebase_auth: ^4.6.1
   #https://pub.dev/packages/firebase_database
   firebase_database: ^10.2.1
-  #https://pub.dev/packages/cloud_firestore/install
+  #https://pub.dev/packages/cloud_firestore
   cloud_firestore: ^4.7.1
+  #https://pub.dev/packages/dotted_border
+  dotted_border: ^2.0.0+3
+  #https://pub.dev/packages/line_awesome_flutter
+  line_awesome_flutter: ^2.0.0
 
 dev_dependencies:
   flutter_test:
