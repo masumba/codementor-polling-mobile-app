@@ -19,6 +19,10 @@ class PollingImageItemCard extends StatelessWidget {
       padding: const EdgeInsets.all(10.0),
       margin: const EdgeInsets.all(10.0),
       width: ScreenUtil.screenWidthFraction(context, dividedBy: 3),
+      height: ScreenUtil.screenHeightFraction(
+        context,
+        dividedBy: 3,
+      ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10.0),
         color: Colors.white,
@@ -35,17 +39,25 @@ class PollingImageItemCard extends StatelessWidget {
         onTap: onTap as void Function()?,
         splashColor: Colors.white60,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Expanded(
-              child: CachedNetworkImage(
-                imageUrl: url ?? '',
-                placeholder: (context, url) => Image.asset(
-                  AppImage.logo,
-                  fit: BoxFit.fitHeight,
-                ),
-                errorWidget: (context, url, error) => Image.asset(
-                  AppImage.logo,
-                  fit: BoxFit.fitHeight,
+              child: Center(
+                child: CachedNetworkImage(
+                  imageUrl: url ?? '',
+                  height: ScreenUtil.screenHeightFraction(
+                    context,
+                    dividedBy: 4,
+                  ),
+                  placeholder: (context, url) => Image.asset(
+                    AppImage.logo,
+                    fit: BoxFit.fitHeight,
+                  ),
+                  errorWidget: (context, url, error) => Image.asset(
+                    AppImage.logo,
+                    fit: BoxFit.fitHeight,
+                  ),
                 ),
               ),
             ),

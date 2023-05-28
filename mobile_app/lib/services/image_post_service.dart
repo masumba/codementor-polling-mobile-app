@@ -17,6 +17,10 @@ class ImagePostService {
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
   final Logger _logger = Logger();
 
+  final String _rootCollection = 'pollingImages';
+  final String _userCollection = 'uploads';
+  final String _storageBucket = 'userImages';
+
   /// Upload image and description to Firebase
   Future<void> uploadImageAndDescription(
       {required File uploadImage,
@@ -35,7 +39,7 @@ class ImagePostService {
         // Upload image to Firebase Storage
         var ref = _storage
             .ref()
-            .child("userImages")
+            .child(_storageBucket)
             .child(userId)
             .child("image-${uuid.v1()}.jpg");
         await ref.putFile(uploadImage);
@@ -45,9 +49,9 @@ class ImagePostService {
 
         // Upload description and image URL to Firestore
         await _fireStore
-            .collection("pollingImages")
+            .collection(_rootCollection)
             .doc(userId)
-            .collection('uploads')
+            .collection(_userCollection)
             .doc(uuid.v1())
             .set({
           "imageUrl": imageUrl,
@@ -86,7 +90,26 @@ class ImagePostService {
     if (authUser != null) {
       String userId = authUser.uid;
 
-      return _fireStore.collection("pollingImages").doc(userId).snapshots();
+      return _fireStore.collection(_rootCollection).doc(userId).snapshots();
+    } else {
+      throw ResourceMissingException("User not logged in");
+    }
+  }
+
+  Stream<List<Map<String, dynamic>>> getUserCollectionDataStream() {
+    var authUser = _authenticationService.getUser();
+    if (authUser != null) {
+      String userId = authUser.uid;
+      // Get the reference to the collection
+      var collectionRef = _fireStore
+          .collection(_rootCollection)
+          .doc(userId)
+          .collection(_userCollection);
+
+      // Return the stream
+      return collectionRef.snapshots().map((snapshot) {
+        return snapshot.docs.map((doc) => doc.data()).toList();
+      });
     } else {
       throw ResourceMissingException("User not logged in");
     }

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile_app/utils/screen_util.dart';
 import 'package:mobile_app/views/home/home_view_model.dart';
 import 'package:mobile_app/widgets/cards/notice_card.dart';
 import 'package:mobile_app/widgets/cards/polling_image_card.dart';
@@ -17,10 +18,10 @@ class _MyImagePostTabState extends State<MyImagePostTab> {
   @override
   Widget build(BuildContext context) {
     var model = getParentViewModel<HomeViewModel>(context);
-    return StreamBuilder<DocumentSnapshot>(
-      stream: model.imagePostService.getImageAndDescriptionUpdates(),
-      builder:
-          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+    return StreamBuilder<List<Map<String, dynamic>>>(
+      stream: model.imagePostService.getUserCollectionDataStream(),
+      builder: (BuildContext context,
+          AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
         if (snapshot.hasError) {
           return const NoticeCard(
             title: 'Your Polling Upload(s)',
@@ -28,24 +29,46 @@ class _MyImagePostTabState extends State<MyImagePostTab> {
           );
         }
 
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const LoadingProgress();
-        }
-
-        Map<String, dynamic>? data =
-            snapshot.data?.data() as Map<String, dynamic>?;
-        if (data != null) {
-          return PollingImageItemCard(
-            url: data['imageUrl'],
-            description: data['description'],
-            onTap: () {},
+        if (!snapshot.hasData) {
+          return const NoticeCard(
+            title: 'Your Polling Upload(s)',
+            message: 'No records have been found.',
           );
         }
 
-        return const NoticeCard(
-          title: 'Your Polling Upload(s)',
-          message: 'No records have been found.',
-        ); // Placeholder for when there is no data
+        switch (snapshot.connectionState) {
+          case ConnectionState.waiting:
+            return const LoadingProgress();
+          default:
+            if (snapshot.data == null) {
+              return const NoticeCard(
+                title: 'Your Polling Upload(s)',
+                message: 'No records have been found.',
+              );
+            }
+            return SizedBox(
+              height: ScreenUtil.screenHeight(
+                    context,
+                    withoutStatusSafeAreaAndToolbar: true,
+                  ) *
+                  0.86,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ListView(
+                  primary: true,
+                  shrinkWrap: true,
+                  children: snapshot.data!.map((map) {
+                    // Replace this with the actual widget for displaying the data
+                    return PollingImageItemCard(
+                      url: map['imageUrl'],
+                      description: map['description'],
+                      onTap: () {},
+                    );
+                  }).toList(),
+                ),
+              ),
+            );
+        }
       },
     );
   }
