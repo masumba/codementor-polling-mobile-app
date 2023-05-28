@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -8,6 +9,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
+import 'package:mobile_app/constants/app_image.dart';
 import 'package:mobile_app/extensions/string_extension.dart';
 import 'package:mobile_app/utils/screen_util.dart';
 import 'package:path/path.dart' as p;
@@ -145,9 +147,10 @@ class _MultiImageCardSelectorState extends State<MultiImageCardSelector> {
 
   /// Returns an icon based on whether the gallery is being used or not.
   Widget imageIcon() {
-    return widget.useGallery
+    /*return widget.useGallery
         ? const Icon(FontAwesomeIcons.fileArrowUp)
-        : const Icon(FontAwesomeIcons.camera);
+        : const Icon(FontAwesomeIcons.camera);*/
+    return Image.asset(AppImage.empty2);
   }
 
   /// Function to handle the image processing request.
@@ -314,21 +317,23 @@ class _MultiImageCardSelectorState extends State<MultiImageCardSelector> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(10.0),
       child: Container(
         constraints: BoxConstraints(
-            minHeight: ScreenUtil.screenHeight(context) * 0.15,
-            minWidth: double.infinity,
-            maxHeight: ScreenUtil.screenHeight(context) * 0.5),
+          minHeight: ScreenUtil.screenHeight(context) * 0.15,
+          minWidth: double.infinity,
+          maxHeight: ScreenUtil.screenHeightFraction(context, dividedBy: 2),
+        ),
         child: Card(
           elevation: 2,
           child: ListTile(
-            leading: ConstrainedBox(
-              constraints: const BoxConstraints(
+            title: ConstrainedBox(
+              constraints: BoxConstraints(
                 minWidth: 50,
                 minHeight: 60,
-                maxWidth: 115,
-                maxHeight: 200,
+                maxHeight:
+                    ScreenUtil.screenHeightFraction(context, dividedBy: 2) *
+                        0.7,
               ),
               child: _isMerging
                   ? const Icon(FontAwesomeIcons.hourglassHalf)
@@ -336,24 +341,26 @@ class _MultiImageCardSelectorState extends State<MultiImageCardSelector> {
                       ? widget.showImage
                           ? Image.file(
                               widget.imageFile!,
-                              fit: BoxFit.cover,
+                              fit: BoxFit.contain,
                             )
                           : imageIcon()
                       : imageIcon(),
             ),
-            title: Text(
-              widget.title.toTitleCase(),
-              style: const TextStyle(fontWeight: FontWeight.bold),
+            subtitle: ListTile(
+              title: AutoSizeText(
+                widget.title.toTitleCase(),
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+              subtitle: AutoSizeText(
+                  'Please click card to ${widget.useGallery ? 'upload' : 'capture'} ${widget.title.toTitleCase()} picture.'
+                      .toTitleCase()),
+              trailing: widget.imageFile != null
+                  ? const Icon(
+                      FontAwesomeIcons.circleCheck,
+                      color: Colors.green,
+                    )
+                  : const Icon(FontAwesomeIcons.circle),
             ),
-            subtitle: Text(
-                'Please click card to ${widget.useGallery ? 'upload' : 'capture'} ${widget.title.toTitleCase()} picture.'
-                    .toTitleCase()),
-            trailing: widget.imageFile != null
-                ? const Icon(
-                    FontAwesomeIcons.circleCheck,
-                    color: Colors.green,
-                  )
-                : const Icon(FontAwesomeIcons.circle),
             onTap: () async {
               try {
                 if (widget.allowCameraOrGallery) {

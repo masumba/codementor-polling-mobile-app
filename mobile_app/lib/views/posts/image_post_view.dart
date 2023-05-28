@@ -18,6 +18,7 @@ class ImagePostView extends StatefulWidget {
 }
 
 class _ImagePostViewState extends State<ImagePostView> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _descriptionController = TextEditingController();
 
   @override
@@ -33,39 +34,55 @@ class _ImagePostViewState extends State<ImagePostView> {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              SizedBox(
-                height: ScreenUtil.screenHeightFraction(context, dividedBy: 3),
-                child: MultiImageCardSelector(
-                  imageFile: model.selectedImage,
-                  allowCameraOrGallery: true,
-                  onClick: (File? file) {
-                    model.selectedImage = file;
-                    model.refreshListeners();
-                  },
-                  title: 'Post image',
-                ),
+              MultiImageCardSelector(
+                imageFile: model.selectedImage,
+                allowCameraOrGallery: true,
+                onClick: (File? file) {
+                  model.selectedImage = file;
+                  model.refreshListeners();
+                },
+                title: 'Post image',
               ),
               ScreenUtil.verticalSpaceNormal,
-              FormFieldBlock(
-                children: [
-                  FormFieldWidget(
-                    title: 'Description',
-                    child: InputField(
-                      controller: _descriptionController,
-                      placeholder: 'Description',
-                      maxLines: 10,
-                      inputFieldHeight: 150.0,
-                    ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Form(
+                  key: _formKey,
+                  child: FormFieldBlock(
+                    children: [
+                      FormFieldWidget(
+                        title: 'Description',
+                        child: InputField(
+                          controller: _descriptionController,
+                          placeholder: 'Description',
+                          maxLines: 10,
+                          inputFieldHeight: 150.0,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your image description.';
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                      FormFieldWidget(
+                        overrideWidget: true,
+                        title: 'Submit',
+                        child: BusyButton(
+                          title: 'Submit Image',
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              model.submit(
+                                description:
+                                    _descriptionController.value.text.trim(),
+                              );
+                            }
+                          },
+                        ),
+                      ),
+                    ],
                   ),
-                  FormFieldWidget(
-                    overrideWidget: true,
-                    title: 'Submit',
-                    child: BusyButton(
-                      title: 'Submit Image',
-                      onPressed: () {},
-                    ),
-                  ),
-                ],
+                ),
               ),
             ],
           ),
