@@ -30,6 +30,7 @@ class _HomeViewState extends State<HomeView> {
         appBarTitle: AppString.title,
         centerTitle: true,
         menuActions: model.menuActions(),
+        pageLoading: model.isPageLoading,
         containerBody: _screens[model.selectedTabIndexHomeView],
         bottomNavBar: BottomNavigationBar(
           currentIndex: model.selectedTabIndexHomeView,

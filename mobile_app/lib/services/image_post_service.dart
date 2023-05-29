@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:logger/logger.dart';
+import 'package:mobile_app/exceptions/invalid_procedure_exception.dart';
 import 'package:mobile_app/exceptions/resource_missing_exception.dart';
 import 'package:mobile_app/service_locator.dart';
 import 'package:mobile_app/services/authentication_service.dart';
@@ -116,7 +117,10 @@ class ImagePostService {
     }
   }
 
-  Stream<List<Map<String, dynamic>>> getCollectionDataStream() {
+  Stream<List<Map<String, dynamic>>> getCollectionDataStream({String? userId}) {
+    if (userId == null) {
+      throw ResourceMissingException('Failed to get user UUID');
+    }
     // Get the reference to the collection
 
     // Return a stream that emits a new list of user documents and their subCollections every time any of them changes
@@ -126,56 +130,57 @@ class ImagePostService {
         var subCollectionRef =
             userDocument.reference.collection(_userCollection);
         var subCollectionSnapshot = await subCollectionRef.get();
-        var subCollectionDocuments =
-            subCollectionSnapshot.docs.map((doc) => doc.data()).toList();
-        /*results.add({
-          'userDocument': userDocument.id,
-          'subCollectionDocuments': subCollectionDocuments,
-        });*/
-        /*results.addAll(subCollectionDocuments);*/
-        List<Map<String, dynamic>> displayResults = [];
-        if (subCollectionDocuments.isNotEmpty) {
-          subCollectionDocuments.forEach((element) {
-            displayResults.add({
-              'userReference': userDocument.id,
-              'imageUrl': element['imageUrl'],
-              'description': element['description'],
-            });
+
+        for (var subCollectionDocument in subCollectionSnapshot.docs) {
+          var votesRef = subCollectionDocument.reference.collection('votes');
+          var votesSnapshot = await votesRef.get();
+
+          int positiveCount = 0;
+          int negativeCount = 0;
+          bool userHasVoted = false;
+          bool? userVote;
+
+          for (var voteDocument in votesSnapshot.docs) {
+            bool voteValue = voteDocument.get('vote');
+            if (voteValue) {
+              positiveCount++;
+            } else {
+              negativeCount++;
+            }
+            if (voteDocument.id == userId) {
+              userHasVoted = true;
+              userVote = voteValue;
+            }
+          }
+
+          results.add({
+            'userReference': userDocument.id,
+            'imageUrl': subCollectionDocument.get('imageUrl'),
+            'description': subCollectionDocument.get('description'),
+            'positiveVotes': positiveCount,
+            'negativeVotes': negativeCount,
+            'userHasVoted': userHasVoted,
+            'userVote': userVote,
+            'uploadReference': subCollectionDocument.reference,
           });
         }
-
-        results.addAll(displayResults);
       }
       return results;
     });
   }
 
-  Future<List<Map<String, dynamic>>> getPollingImages() async {
-    // Get the reference to the collection
-    var collectionRef = collection;
+  Future<void> addVote(
+      {required DocumentReference reference,
+      required String userId,
+      required bool voteValue}) async {
+    DocumentReference docRef = reference;
+    var voteRef = docRef.collection('votes').doc(userId);
+    var voteSnapshot = await voteRef.get();
 
-    // Retrieve all user documents
-    var allUserDocumentsSnapshot = await collectionRef.get();
-    var allUserDocuments = allUserDocumentsSnapshot.docs;
-
-    // Prepare a list to hold the results
-    List<Map<String, dynamic>> results = [];
-
-    // For each user document, retrieve the subcollection documents
-    for (var userDocument in allUserDocuments) {
-      var subCollectionRef = userDocument.reference.collection(_userCollection);
-      var subCollectionSnapshot = await subCollectionRef.get();
-      var subCollectionDocuments =
-          subCollectionSnapshot.docs.map((doc) => doc.data()).toList();
-
-      // Add the user document and its subcollection documents to the results
-      results.add({
-        'userDocument': userDocument.id,
-        'subCollectionDocuments': subCollectionDocuments,
-      });
+    if (voteSnapshot.exists) {
+      throw InvalidProcedureException('This user has already voted.');
+    } else {
+      await voteRef.set({'vote': voteValue});
     }
-
-    // Return the results
-    return results;
   }
 }

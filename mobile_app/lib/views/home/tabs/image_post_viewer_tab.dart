@@ -4,6 +4,7 @@ import 'package:mobile_app/utils/screen_util.dart';
 import 'package:mobile_app/views/home/home_view_model.dart';
 import 'package:mobile_app/widgets/cards/notice_card.dart';
 import 'package:mobile_app/widgets/cards/polling_image_card.dart';
+import 'package:mobile_app/widgets/cards/votable_polling_image_item_card.dart';
 import 'package:mobile_app/widgets/loading_progress.dart';
 import 'package:stacked/stacked.dart';
 
@@ -19,10 +20,14 @@ class _ImagePostViewerTabState extends State<ImagePostViewerTab> {
   Widget build(BuildContext context) {
     var model = getParentViewModel<HomeViewModel>(context);
     return StreamBuilder<List<Map<String, dynamic>>>(
-      stream: model.imagePostService.getCollectionDataStream(),
+      stream: model.imagePostService
+          .getCollectionDataStream(userId: model.authUserId),
       builder: (BuildContext context,
           AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
         if (snapshot.hasError) {
+          model.logger.e(snapshot.error);
+          model.logger.wtf(snapshot.stackTrace);
+
           return const NoticeCard(
             title: 'Polling Record(s)',
             message: 'An error has occurred while retrieving data.',
@@ -68,6 +73,7 @@ class _PollingImageCardListBlock extends StatelessWidget {
         message: 'No upload records have been found.',
       );
     }
+    var model = getParentViewModel<HomeViewModel>(context);
     return SizedBox(
       height: ScreenUtil.screenHeight(
             context,
@@ -80,11 +86,26 @@ class _PollingImageCardListBlock extends StatelessWidget {
           primary: true,
           shrinkWrap: true,
           children: snapshotData.map((map) {
-            return PollingImageItemCard(
+            return VotablePollingImageItemCard(
               username: map['userReference'],
               url: map['imageUrl'],
               description: map['description'],
-              onTap: () {},
+              voteResult: map['userVote'],
+              onUpVote: () {
+                model.vote(
+                  uploadReference: map['uploadReference'],
+                  positive: true,
+                );
+              },
+              onDownVote: () {
+                model.vote(
+                  uploadReference: map['uploadReference'],
+                  positive: false,
+                );
+              },
+              upVotes: map['positiveVotes'],
+              downVotes: map['negativeVotes'],
+              canVote: !map['userHasVoted'],
             );
           }).toList(),
         ),
