@@ -10,7 +10,6 @@ class VotablePollingImageItemCard extends StatelessWidget {
   final String description;
   final String username;
   final String url;
-  final Function onTap;
   final bool canVote;
   final Function onUpVote;
   final Function onDownVote;
@@ -20,7 +19,6 @@ class VotablePollingImageItemCard extends StatelessWidget {
   const VotablePollingImageItemCard(
       {Key? key,
       required this.url,
-      required this.onTap,
       required this.onUpVote,
       required this.onDownVote,
       this.canVote = false,
@@ -57,50 +55,33 @@ class VotablePollingImageItemCard extends StatelessWidget {
           ),
         ],
       ),
-      child: InkWell(
-        onTap: onTap as void Function()?,
-        splashColor: Colors.white60,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Expanded(
-              child: Center(
-                child: CachedNetworkImage(
-                  imageUrl: url,
-                  height: ScreenUtil.screenHeightFraction(
-                    context,
-                    dividedBy: 4,
-                  ),
-                  placeholder: (context, url) => Image.asset(
-                    AppImage.logo,
-                    fit: BoxFit.fitHeight,
-                  ),
-                  errorWidget: (context, url, error) => Image.asset(
-                    AppImage.logo,
-                    fit: BoxFit.fitHeight,
-                  ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Expanded(
+            child: Center(
+              child: CachedNetworkImage(
+                imageUrl: url,
+                height: ScreenUtil.screenHeightFraction(
+                  context,
+                  dividedBy: 4,
+                ),
+                placeholder: (context, url) => Image.asset(
+                  AppImage.logo,
+                  fit: BoxFit.fitHeight,
+                ),
+                errorWidget: (context, url, error) => Image.asset(
+                  AppImage.logo,
+                  fit: BoxFit.fitHeight,
                 ),
               ),
             ),
-            ScreenUtil.divider(color: AppColor.dividerColor.toColor()),
-            if (username.isNotEmpty)
-              AutoSizeText(
-                'Username: $username',
-                style: const TextStyle(
-                  shadows: <Shadow>[
-                    Shadow(
-                      color: Colors.black38,
-                      offset: Offset(0.3, 0),
-                      blurRadius: 1.0,
-                    )
-                  ],
-                  color: Colors.black87,
-                  fontSize: 15.0,
-                ),
-              ),
+          ),
+          ScreenUtil.divider(color: AppColor.dividerColor.toColor()),
+          if (username.isNotEmpty)
             AutoSizeText(
-              'Description:\n$description',
+              'Username: $username',
               style: const TextStyle(
                 shadows: <Shadow>[
                   Shadow(
@@ -110,32 +91,45 @@ class VotablePollingImageItemCard extends StatelessWidget {
                   )
                 ],
                 color: Colors.black87,
-                fontSize: 14.0,
+                fontSize: 15.0,
               ),
             ),
-            Text(
-              '${votePercentage.toStringAsFixed(2)}% Up-votes',
-              style: const TextStyle(
-                color: Colors.green,
-                fontWeight: FontWeight.bold,
-              ),
+          AutoSizeText(
+            'Description:\n$description',
+            style: const TextStyle(
+              shadows: <Shadow>[
+                Shadow(
+                  color: Colors.black38,
+                  offset: Offset(0.3, 0),
+                  blurRadius: 1.0,
+                )
+              ],
+              color: Colors.black87,
+              fontSize: 14.0,
             ),
-            if (canVote)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  IconButton(
-                    onPressed: () {},
-                    icon: Icon(Icons.thumb_up),
-                  ),
-                  IconButton(
-                    onPressed: () {},
-                    icon: Icon(Icons.thumb_down),
-                  ),
-                ],
-              ),
-          ],
-        ),
+          ),
+          Text(
+            '${votePercentage.toStringAsFixed(2)}% Up-votes',
+            style: const TextStyle(
+              color: Colors.green,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          if (canVote)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                IconButton(
+                  onPressed: onUpVote as void Function()?,
+                  icon: Icon(Icons.thumb_up),
+                ),
+                IconButton(
+                  onPressed: onDownVote as void Function()?,
+                  icon: Icon(Icons.thumb_down),
+                ),
+              ],
+            ),
+        ],
       ),
     );
   }

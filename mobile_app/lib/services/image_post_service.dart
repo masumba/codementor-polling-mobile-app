@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:logger/logger.dart';
+import 'package:mobile_app/exceptions/invalid_procedure_exception.dart';
 import 'package:mobile_app/exceptions/resource_missing_exception.dart';
 import 'package:mobile_app/service_locator.dart';
 import 'package:mobile_app/services/authentication_service.dart';
@@ -130,7 +131,8 @@ class ImagePostService {
         var subCollectionDocuments = subCollectionSnapshot.docs
             .map((doc) => {
                   'data': doc.data(),
-                  'reference': doc.id,
+                  'reference': doc.reference,
+                  'id': doc.id,
                 })
             .toList();
         List<Map<String, dynamic>> displayResults = [];
@@ -142,6 +144,7 @@ class ImagePostService {
             displayResults.add({
               'userReference': userDocument.id,
               'uploadReference': element['reference'],
+              'uploadId': element['id'],
               'imageUrl': image,
               'description': description,
             });
@@ -152,5 +155,21 @@ class ImagePostService {
       }
       return results;
     });
+  }
+
+  Future<void> addVote(
+      {required DocumentReference reference,
+      required String userId,
+      required bool voteValue}) async {
+    _logger.d(reference);
+    DocumentReference docRef = reference;
+    var voteRef = docRef.collection('votes').doc(userId);
+    var voteSnapshot = await voteRef.get();
+
+    if (voteSnapshot.exists) {
+      throw InvalidProcedureException('This user has already voted.');
+    } else {
+      await voteRef.set({'vote': voteValue});
+    }
   }
 }

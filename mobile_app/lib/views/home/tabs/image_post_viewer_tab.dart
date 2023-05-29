@@ -69,6 +69,7 @@ class _PollingImageCardListBlock extends StatelessWidget {
         message: 'No upload records have been found.',
       );
     }
+    var model = getParentViewModel<HomeViewModel>(context);
     return SizedBox(
       height: ScreenUtil.screenHeight(
             context,
@@ -85,9 +86,18 @@ class _PollingImageCardListBlock extends StatelessWidget {
               username: map['userReference'],
               url: map['imageUrl'],
               description: map['description'],
-              onTap: () {},
-              onUpVote: () {},
-              onDownVote: () {},
+              onUpVote: () {
+                model.vote(
+                  uploadReference: map['uploadReference'],
+                  positive: true,
+                );
+              },
+              onDownVote: () {
+                model.vote(
+                  uploadReference: map['uploadReference'],
+                  positive: false,
+                );
+              },
               canVote: true,
             );
           }).toList(),
