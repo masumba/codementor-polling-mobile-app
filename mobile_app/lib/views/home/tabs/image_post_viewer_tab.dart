@@ -81,6 +81,7 @@ class _PollingImageCardListBlock extends StatelessWidget {
           shrinkWrap: true,
           children: snapshotData.map((map) {
             return PollingImageItemCard(
+              username: map['userReference'],
               url: map['imageUrl'],
               description: map['description'],
               onTap: () {},

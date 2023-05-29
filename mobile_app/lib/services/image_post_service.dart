@@ -119,7 +119,7 @@ class ImagePostService {
   Stream<List<Map<String, dynamic>>> getCollectionDataStream() {
     // Get the reference to the collection
 
-    // Return a stream that emits a new list of user documents and their subcollections every time any of them changes
+    // Return a stream that emits a new list of user documents and their subCollections every time any of them changes
     return collection.snapshots().asyncMap((snapshot) async {
       List<Map<String, dynamic>> results = [];
       for (var userDocument in snapshot.docs) {
@@ -132,7 +132,19 @@ class ImagePostService {
           'userDocument': userDocument.id,
           'subCollectionDocuments': subCollectionDocuments,
         });*/
-        results.addAll(subCollectionDocuments);
+        /*results.addAll(subCollectionDocuments);*/
+        List<Map<String, dynamic>> displayResults = [];
+        if (subCollectionDocuments.isNotEmpty) {
+          subCollectionDocuments.forEach((element) {
+            displayResults.add({
+              'userReference': userDocument.id,
+              'imageUrl': element['imageUrl'],
+              'description': element['description'],
+            });
+          });
+        }
+
+        results.addAll(displayResults);
       }
       return results;
     });
