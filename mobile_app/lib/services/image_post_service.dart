@@ -117,7 +117,10 @@ class ImagePostService {
     }
   }
 
-  Stream<List<Map<String, dynamic>>> getCollectionDataStream() {
+  Stream<List<Map<String, dynamic>>> getCollectionDataStream({String? userId}) {
+    if (userId == null) {
+      throw ResourceMissingException('Failed to get user UUID');
+    }
     // Get the reference to the collection
 
     // Return a stream that emits a new list of user documents and their subCollections every time any of them changes
@@ -128,30 +131,39 @@ class ImagePostService {
             userDocument.reference.collection(_userCollection);
         var subCollectionSnapshot = await subCollectionRef.get();
 
-        var subCollectionDocuments = subCollectionSnapshot.docs
-            .map((doc) => {
-                  'data': doc.data(),
-                  'reference': doc.reference,
-                  'id': doc.id,
-                })
-            .toList();
-        List<Map<String, dynamic>> displayResults = [];
-        if (subCollectionDocuments.isNotEmpty) {
-          subCollectionDocuments.forEach((element) {
-            var data = element['data'] as Map;
-            String? image = data['imageUrl'];
-            String? description = data['description'];
-            displayResults.add({
-              'userReference': userDocument.id,
-              'uploadReference': element['reference'],
-              'uploadId': element['id'],
-              'imageUrl': image,
-              'description': description,
-            });
+        for (var subCollectionDocument in subCollectionSnapshot.docs) {
+          var votesRef = subCollectionDocument.reference.collection('votes');
+          var votesSnapshot = await votesRef.get();
+
+          int positiveCount = 0;
+          int negativeCount = 0;
+          bool userHasVoted = false;
+          bool? userVote;
+
+          for (var voteDocument in votesSnapshot.docs) {
+            bool voteValue = voteDocument.get('vote');
+            if (voteValue) {
+              positiveCount++;
+            } else {
+              negativeCount++;
+            }
+            if (voteDocument.id == userId) {
+              userHasVoted = true;
+              userVote = voteValue;
+            }
+          }
+
+          results.add({
+            'userReference': userDocument.id,
+            'imageUrl': subCollectionDocument.get('imageUrl'),
+            'description': subCollectionDocument.get('description'),
+            'positiveVotes': positiveCount,
+            'negativeVotes': negativeCount,
+            'userHasVoted': userHasVoted,
+            'userVote': userVote,
+            'uploadReference': subCollectionDocument.reference,
           });
         }
-
-        results.addAll(displayResults);
       }
       return results;
     });
@@ -161,7 +173,6 @@ class ImagePostService {
       {required DocumentReference reference,
       required String userId,
       required bool voteValue}) async {
-    _logger.d(reference);
     DocumentReference docRef = reference;
     var voteRef = docRef.collection('votes').doc(userId);
     var voteSnapshot = await voteRef.get();

@@ -6,11 +6,12 @@ import 'package:mobile_app/constants/app_image.dart';
 import 'package:mobile_app/extensions/string_extension.dart';
 import 'package:mobile_app/utils/screen_util.dart';
 
-class VotablePollingImageItemCard extends StatelessWidget {
+class VotablePollingImageItemCard extends StatefulWidget {
   final String description;
   final String username;
   final String url;
   final bool canVote;
+  final bool? voteResult;
   final Function onUpVote;
   final Function onDownVote;
   final int upVotes;
@@ -25,12 +26,28 @@ class VotablePollingImageItemCard extends StatelessWidget {
       this.username = '',
       this.description = '',
       this.upVotes = 0,
+      this.voteResult,
       this.downVotes = 0})
       : super(key: key);
 
+  @override
+  State<VotablePollingImageItemCard> createState() =>
+      _VotablePollingImageItemCardState();
+}
+
+class _VotablePollingImageItemCardState
+    extends State<VotablePollingImageItemCard> {
   double get votePercentage {
-    if (upVotes == 0 && downVotes == 0) return 0.0;
-    return (upVotes / (upVotes + downVotes)) * 100;
+    if (widget.upVotes == 0 && widget.downVotes == 0) return 0.0;
+    return (widget.upVotes / (widget.upVotes + widget.downVotes)) * 100;
+  }
+
+  bool get currentVote {
+    var value = widget.voteResult;
+    if (value != null) {
+      return value;
+    }
+    return false;
   }
 
   @override
@@ -62,7 +79,7 @@ class VotablePollingImageItemCard extends StatelessWidget {
           Expanded(
             child: Center(
               child: CachedNetworkImage(
-                imageUrl: url,
+                imageUrl: widget.url,
                 height: ScreenUtil.screenHeightFraction(
                   context,
                   dividedBy: 4,
@@ -79,9 +96,9 @@ class VotablePollingImageItemCard extends StatelessWidget {
             ),
           ),
           ScreenUtil.divider(color: AppColor.dividerColor.toColor()),
-          if (username.isNotEmpty)
+          if (widget.username.isNotEmpty)
             AutoSizeText(
-              'Username: $username',
+              'Username: ${widget.username}',
               style: const TextStyle(
                 shadows: <Shadow>[
                   Shadow(
@@ -95,7 +112,7 @@ class VotablePollingImageItemCard extends StatelessWidget {
               ),
             ),
           AutoSizeText(
-            'Description:\n$description',
+            'Description:\n${widget.description}',
             style: const TextStyle(
               shadows: <Shadow>[
                 Shadow(
@@ -115,19 +132,24 @@ class VotablePollingImageItemCard extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          if (canVote)
+          if (widget.canVote)
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 IconButton(
-                  onPressed: onUpVote as void Function()?,
-                  icon: Icon(Icons.thumb_up),
+                  onPressed: widget.onUpVote as void Function()?,
+                  icon: const Icon(Icons.thumb_up),
                 ),
                 IconButton(
-                  onPressed: onDownVote as void Function()?,
-                  icon: Icon(Icons.thumb_down),
+                  onPressed: widget.onDownVote as void Function()?,
+                  icon: const Icon(Icons.thumb_down),
                 ),
               ],
+            ),
+          if (widget.voteResult != null)
+            Icon(
+              currentVote ? Icons.thumb_up : Icons.thumb_down,
+              color: currentVote ? Colors.green : Colors.red,
             ),
         ],
       ),

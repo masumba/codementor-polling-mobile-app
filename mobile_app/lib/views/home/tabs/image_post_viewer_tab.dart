@@ -20,10 +20,14 @@ class _ImagePostViewerTabState extends State<ImagePostViewerTab> {
   Widget build(BuildContext context) {
     var model = getParentViewModel<HomeViewModel>(context);
     return StreamBuilder<List<Map<String, dynamic>>>(
-      stream: model.imagePostService.getCollectionDataStream(),
+      stream: model.imagePostService
+          .getCollectionDataStream(userId: model.authUserId),
       builder: (BuildContext context,
           AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
         if (snapshot.hasError) {
+          model.logger.e(snapshot.error);
+          model.logger.wtf(snapshot.stackTrace);
+
           return const NoticeCard(
             title: 'Polling Record(s)',
             message: 'An error has occurred while retrieving data.',
@@ -86,6 +90,7 @@ class _PollingImageCardListBlock extends StatelessWidget {
               username: map['userReference'],
               url: map['imageUrl'],
               description: map['description'],
+              voteResult: map['userVote'],
               onUpVote: () {
                 model.vote(
                   uploadReference: map['uploadReference'],
@@ -98,7 +103,9 @@ class _PollingImageCardListBlock extends StatelessWidget {
                   positive: false,
                 );
               },
-              canVote: true,
+              upVotes: map['positiveVotes'],
+              downVotes: map['negativeVotes'],
+              canVote: !map['userHasVoted'],
             );
           }).toList(),
         ),

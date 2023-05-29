@@ -9,7 +9,13 @@ import 'package:mobile_app/views/app_base_view_model.dart';
 class HomeViewModel extends AppBaseViewModel {
   int selectedTabIndexHomeView = 0;
   final ImagePostService imagePostService = locator<ImagePostService>();
-  Future<void> init() async {}
+  String? authUserId;
+  Future<void> init() async {
+    loadPageState(isLoading: true);
+    authUserId = await authenticationService.getAuthUUID();
+    notifyListeners();
+    loadPageState();
+  }
 
   void updateIndex(int position) {
     selectedTabIndexHomeView = position;
@@ -21,7 +27,7 @@ class HomeViewModel extends AppBaseViewModel {
       required bool positive}) async {
     dialogService.showProgress();
     try {
-      String? userId = await authenticationService.getAuthUUID();
+      String? userId = authUserId;
       if (userId == null) {
         return;
       }
@@ -34,6 +40,7 @@ class HomeViewModel extends AppBaseViewModel {
         message: 'Vote has been cast',
         type: AlertType.success,
       );
+      init();
     } on InvalidProcedureException catch (exception, stacktrace) {
       logger.e(exception);
       logger.e(stacktrace);
