@@ -126,20 +126,24 @@ class ImagePostService {
         var subCollectionRef =
             userDocument.reference.collection(_userCollection);
         var subCollectionSnapshot = await subCollectionRef.get();
-        var subCollectionDocuments =
-            subCollectionSnapshot.docs.map((doc) => doc.data()).toList();
-        /*results.add({
-          'userDocument': userDocument.id,
-          'subCollectionDocuments': subCollectionDocuments,
-        });*/
-        /*results.addAll(subCollectionDocuments);*/
+
+        var subCollectionDocuments = subCollectionSnapshot.docs
+            .map((doc) => {
+                  'data': doc.data(),
+                  'reference': doc.id,
+                })
+            .toList();
         List<Map<String, dynamic>> displayResults = [];
         if (subCollectionDocuments.isNotEmpty) {
           subCollectionDocuments.forEach((element) {
+            var data = element['data'] as Map;
+            String? image = data['imageUrl'];
+            String? description = data['description'];
             displayResults.add({
               'userReference': userDocument.id,
-              'imageUrl': element['imageUrl'],
-              'description': element['description'],
+              'uploadReference': element['reference'],
+              'imageUrl': image,
+              'description': description,
             });
           });
         }
@@ -148,34 +152,5 @@ class ImagePostService {
       }
       return results;
     });
-  }
-
-  Future<List<Map<String, dynamic>>> getPollingImages() async {
-    // Get the reference to the collection
-    var collectionRef = collection;
-
-    // Retrieve all user documents
-    var allUserDocumentsSnapshot = await collectionRef.get();
-    var allUserDocuments = allUserDocumentsSnapshot.docs;
-
-    // Prepare a list to hold the results
-    List<Map<String, dynamic>> results = [];
-
-    // For each user document, retrieve the subcollection documents
-    for (var userDocument in allUserDocuments) {
-      var subCollectionRef = userDocument.reference.collection(_userCollection);
-      var subCollectionSnapshot = await subCollectionRef.get();
-      var subCollectionDocuments =
-          subCollectionSnapshot.docs.map((doc) => doc.data()).toList();
-
-      // Add the user document and its subcollection documents to the results
-      results.add({
-        'userDocument': userDocument.id,
-        'subCollectionDocuments': subCollectionDocuments,
-      });
-    }
-
-    // Return the results
-    return results;
   }
 }

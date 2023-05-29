@@ -4,6 +4,7 @@ import 'package:mobile_app/utils/screen_util.dart';
 import 'package:mobile_app/views/home/home_view_model.dart';
 import 'package:mobile_app/widgets/cards/notice_card.dart';
 import 'package:mobile_app/widgets/cards/polling_image_card.dart';
+import 'package:mobile_app/widgets/cards/votable_polling_image_item_card.dart';
 import 'package:mobile_app/widgets/loading_progress.dart';
 import 'package:stacked/stacked.dart';
 
@@ -80,11 +81,14 @@ class _PollingImageCardListBlock extends StatelessWidget {
           primary: true,
           shrinkWrap: true,
           children: snapshotData.map((map) {
-            return PollingImageItemCard(
+            return VotablePollingImageItemCard(
               username: map['userReference'],
               url: map['imageUrl'],
               description: map['description'],
               onTap: () {},
+              onUpVote: () {},
+              onDownVote: () {},
+              canVote: true,
             );
           }).toList(),
         ),
