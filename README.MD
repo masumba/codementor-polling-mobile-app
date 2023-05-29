@@ -10,7 +10,7 @@ Built with *[Flutter](https://flutter.dev/)*
 
 Screenshots of your app and/or a link to your live demo
 
-<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
   
   ![WhatsApp Image 2023-05-30 at 00 02 12](https://github.com/masumba/codementor-polling-mobile-app/assets/39776329/1b8de994-fba0-4c2d-97c2-09d3d2eb65ce)
 
