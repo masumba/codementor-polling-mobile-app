@@ -46,30 +46,48 @@ class _MyImagePostTabState extends State<MyImagePostTab> {
                 message: 'No records have been found.',
               );
             }
-            return SizedBox(
-              height: ScreenUtil.screenHeight(
-                    context,
-                    withoutStatusSafeAreaAndToolbar: true,
-                  ) *
-                  0.86,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ListView(
-                  primary: true,
-                  shrinkWrap: true,
-                  children: snapshot.data!.map((map) {
-                    // Replace this with the actual widget for displaying the data
-                    return PollingImageItemCard(
-                      url: map['imageUrl'],
-                      description: map['description'],
-                      onTap: () {},
-                    );
-                  }).toList(),
-                ),
-              ),
+            return _MyPollingImageCardListBlock(
+              snapshotData: snapshot.data ?? [],
             );
         }
       },
+    );
+  }
+}
+
+class _MyPollingImageCardListBlock extends StatelessWidget {
+  final List<Map<String, dynamic>> snapshotData;
+  const _MyPollingImageCardListBlock({Key? key, required this.snapshotData})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    if (snapshotData.isEmpty) {
+      return const NoticeCard(
+        title: 'Your Polling Upload(s)',
+        message: 'No upload records have been found.',
+      );
+    }
+    return SizedBox(
+      height: ScreenUtil.screenHeight(
+            context,
+            withoutStatusSafeAreaAndToolbar: true,
+          ) *
+          0.86,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ListView(
+          primary: true,
+          shrinkWrap: true,
+          children: snapshotData.map((map) {
+            return PollingImageItemCard(
+              url: map['imageUrl'],
+              description: map['description'],
+              onTap: () {},
+            );
+          }).toList(),
+        ),
+      ),
     );
   }
 }

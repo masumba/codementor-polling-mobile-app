@@ -15,11 +15,12 @@ class ImagePostService {
 
   final FirebaseStorage _storage = FirebaseStorage.instance;
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
-  final Logger _logger = Logger();
-
   final String _rootCollection = 'pollingImages';
   final String _userCollection = 'uploads';
   final String _storageBucket = 'userImages';
+  final CollectionReference collection =
+      FirebaseFirestore.instance.collection('pollingImages');
+  final Logger _logger = Logger();
 
   /// Upload image and description to Firebase
   Future<void> uploadImageAndDescription(
@@ -47,13 +48,13 @@ class ImagePostService {
         // Get download URL
         var imageUrl = await ref.getDownloadURL();
 
-        // Upload description and image URL to Firestore
-        await _fireStore
-            .collection(_rootCollection)
-            .doc(userId)
-            .collection(_userCollection)
-            .doc(uuid.v1())
-            .set({
+        // Make sure the userId document is created first
+        var userDocument = collection.doc(userId);
+        await userDocument.set({'initialized': true});
+
+        // Then create the subCollection and the new document
+        // Upload description and image URL to FireStore
+        await userDocument.collection(_userCollection).doc(uuid.v1()).set({
           "imageUrl": imageUrl,
           "description": description,
         });
@@ -113,5 +114,68 @@ class ImagePostService {
     } else {
       throw ResourceMissingException("User not logged in");
     }
+  }
+
+  Stream<List<Map<String, dynamic>>> getCollectionDataStream() {
+    // Get the reference to the collection
+
+    // Return a stream that emits a new list of user documents and their subCollections every time any of them changes
+    return collection.snapshots().asyncMap((snapshot) async {
+      List<Map<String, dynamic>> results = [];
+      for (var userDocument in snapshot.docs) {
+        var subCollectionRef =
+            userDocument.reference.collection(_userCollection);
+        var subCollectionSnapshot = await subCollectionRef.get();
+        var subCollectionDocuments =
+            subCollectionSnapshot.docs.map((doc) => doc.data()).toList();
+        /*results.add({
+          'userDocument': userDocument.id,
+          'subCollectionDocuments': subCollectionDocuments,
+        });*/
+        /*results.addAll(subCollectionDocuments);*/
+        List<Map<String, dynamic>> displayResults = [];
+        if (subCollectionDocuments.isNotEmpty) {
+          subCollectionDocuments.forEach((element) {
+            displayResults.add({
+              'userReference': userDocument.id,
+              'imageUrl': element['imageUrl'],
+              'description': element['description'],
+            });
+          });
+        }
+
+        results.addAll(displayResults);
+      }
+      return results;
+    });
+  }
+
+  Future<List<Map<String, dynamic>>> getPollingImages() async {
+    // Get the reference to the collection
+    var collectionRef = collection;
+
+    // Retrieve all user documents
+    var allUserDocumentsSnapshot = await collectionRef.get();
+    var allUserDocuments = allUserDocumentsSnapshot.docs;
+
+    // Prepare a list to hold the results
+    List<Map<String, dynamic>> results = [];
+
+    // For each user document, retrieve the subcollection documents
+    for (var userDocument in allUserDocuments) {
+      var subCollectionRef = userDocument.reference.collection(_userCollection);
+      var subCollectionSnapshot = await subCollectionRef.get();
+      var subCollectionDocuments =
+          subCollectionSnapshot.docs.map((doc) => doc.data()).toList();
+
+      // Add the user document and its subcollection documents to the results
+      results.add({
+        'userDocument': userDocument.id,
+        'subCollectionDocuments': subCollectionDocuments,
+      });
+    }
+
+    // Return the results
+    return results;
   }
 }

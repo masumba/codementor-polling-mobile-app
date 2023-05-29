@@ -1,16 +1,23 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile_app/constants/app_color.dart';
 import 'package:mobile_app/constants/app_image.dart';
+import 'package:mobile_app/extensions/string_extension.dart';
 import 'package:mobile_app/utils/screen_util.dart';
 
 class PollingImageItemCard extends StatelessWidget {
   final String description;
+  final String username;
   final String url;
   final Function onTap;
 
   const PollingImageItemCard(
-      {Key? key, required this.url, required this.onTap, this.description = ''})
+      {Key? key,
+      required this.url,
+      required this.onTap,
+      this.username = '',
+      this.description = ''})
       : super(key: key);
 
   @override
@@ -61,6 +68,22 @@ class PollingImageItemCard extends StatelessWidget {
                 ),
               ),
             ),
+            ScreenUtil.divider(color: AppColor.dividerColor.toColor()),
+            if (username.isNotEmpty)
+              AutoSizeText(
+                'Username: $username',
+                style: const TextStyle(
+                  shadows: <Shadow>[
+                    Shadow(
+                      color: Colors.black38,
+                      offset: Offset(0.3, 0),
+                      blurRadius: 1.0,
+                    )
+                  ],
+                  color: Colors.black87,
+                  fontSize: 18.0,
+                ),
+              ),
             AutoSizeText(
               description,
               style: const TextStyle(
@@ -74,7 +97,7 @@ class PollingImageItemCard extends StatelessWidget {
                 color: Colors.black87,
                 fontSize: 18.0,
               ),
-            )
+            ),
           ],
         ),
       ),

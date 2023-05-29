@@ -32,6 +32,12 @@ class ScreenUtil {
     ],
   );
 
+  static Widget divider({Color color = Colors.blueGrey}) => Column(
+        children: <Widget>[
+          Divider(color: color),
+        ],
+      );
+
   /// Returns a vertical space widget with a specific height
   static Widget verticalSpace(double height) => SizedBox(height: height);
 
