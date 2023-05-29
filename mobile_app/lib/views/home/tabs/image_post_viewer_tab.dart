@@ -61,15 +61,31 @@ class _ImagePostViewerTabState extends State<ImagePostViewerTab> {
                   0.86,
               child: SwipeImageGallery(
                 onUpVote: (ImagePostRecordDto dto) {
-                  model.vote(
-                    uploadReference: dto.uploadReference,
-                    positive: true,
-                  );
+                  if (dto.userHasVoted) {
+                    model.dialogService
+                        .showToast(content: 'You have already voted.');
+                  } else {
+                    model.vote(
+                      uploadReference: dto.uploadReference,
+                      positive: true,
+                    );
+                  }
                 },
                 onDownVote: (ImagePostRecordDto dto) {
-                  model.vote(
-                    uploadReference: dto.uploadReference,
-                    positive: false,
+                  if (dto.userHasVoted) {
+                    model.dialogService
+                        .showToast(content: 'You have already voted.');
+                  } else {
+                    model.vote(
+                      uploadReference: dto.uploadReference,
+                      positive: false,
+                    );
+                  }
+                },
+                onInfoClick: (ImagePostRecordDto dto) {
+                  model.dialogService.showAlertDialog(
+                    title: dto.userReference,
+                    message: 'Description:\n${dto.description}',
                   );
                 },
                 children: snapshot.data ?? [],

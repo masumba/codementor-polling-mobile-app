@@ -5,11 +5,13 @@ class SwipeImageGallery extends StatefulWidget {
   final List<ImagePostRecordDto> children;
   final Function(ImagePostRecordDto) onUpVote;
   final Function(ImagePostRecordDto) onDownVote;
+  final Function(ImagePostRecordDto) onInfoClick;
   const SwipeImageGallery({
     Key? key,
     required this.children,
     required this.onUpVote,
     required this.onDownVote,
+    required this.onInfoClick,
   }) : super(key: key);
 
   @override
@@ -43,6 +45,9 @@ class _SwipeImageGalleryState extends State<SwipeImageGallery> {
         const Text(
           'Double Tap To Like',
           textAlign: TextAlign.center,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
         ),
         Expanded(
           child: GestureDetector(
@@ -61,7 +66,7 @@ class _SwipeImageGalleryState extends State<SwipeImageGallery> {
                     ),
                     Positioned(
                       left: 8,
-                      top: MediaQuery.of(context).size.height * 0.6,
+                      top: MediaQuery.of(context).size.height * 0.5,
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.black.withOpacity(0.3),
@@ -82,6 +87,13 @@ class _SwipeImageGalleryState extends State<SwipeImageGallery> {
                               color: Colors.white,
                               onPressed: () {
                                 widget.onDownVote(widget.children[index]);
+                              },
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.info_outline_rounded),
+                              color: Colors.white,
+                              onPressed: () {
+                                widget.onInfoClick(widget.children[index]);
                               },
                             ),
                           ],
