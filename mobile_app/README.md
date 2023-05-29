@@ -1,6 +1,6 @@
 # mobile_app
 
-A new Flutter Polling mobile app project for codementor.
+A new Flutter Polling mobile app project for CodeMentor.
 
 ## Getting Started
 
