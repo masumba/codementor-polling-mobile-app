@@ -46,7 +46,7 @@ class _MyImagePostTabState extends State<MyImagePostTab> {
                 message: 'No records have been found.',
               );
             }
-            return _PollingImageCardListBlock(
+            return _MyPollingImageCardListBlock(
               snapshotData: snapshot.data ?? [],
             );
         }
@@ -55,9 +55,9 @@ class _MyImagePostTabState extends State<MyImagePostTab> {
   }
 }
 
-class _PollingImageCardListBlock extends StatelessWidget {
+class _MyPollingImageCardListBlock extends StatelessWidget {
   final List<Map<String, dynamic>> snapshotData;
-  const _PollingImageCardListBlock({Key? key, required this.snapshotData})
+  const _MyPollingImageCardListBlock({Key? key, required this.snapshotData})
       : super(key: key);
 
   @override
