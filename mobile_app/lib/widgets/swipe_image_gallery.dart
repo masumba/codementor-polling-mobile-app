@@ -1,5 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile_app/constants/app_image.dart';
 import 'package:mobile_app/models/image_post_record_dto.dart';
+import 'package:mobile_app/widgets/loading_progress.dart';
 
 class SwipeImageGallery extends StatefulWidget {
   final List<ImagePostRecordDto> children;
@@ -60,9 +63,13 @@ class _SwipeImageGalleryState extends State<SwipeImageGallery> {
                 return Stack(
                   fit: StackFit.expand,
                   children: [
-                    Image.network(
-                      widget.children[index].imageUrl,
-                      fit: BoxFit.scaleDown,
+                    CachedNetworkImage(
+                      imageUrl: widget.children[index].imageUrl,
+                      placeholder: (context, url) => const LoadingProgress(),
+                      errorWidget: (context, url, error) => Image.asset(
+                        AppImage.empty2,
+                        fit: BoxFit.fitHeight,
+                      ),
                     ),
                     Positioned(
                       left: 8,
