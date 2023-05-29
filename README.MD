@@ -7,7 +7,9 @@ Find the project requirements here: [Polling mobile app](https://www.codementor.
 Built with *[Flutter](https://flutter.dev/)*
 
 ## Screenshots and demo
-Screenshots of your app and/or a link to your live demo![WhatsApp Image 2023-05-30 at 00 02 12](https://github.com/masumba/codementor-polling-mobile-app/assets/39776329/1b8de994-fba0-4c2d-97c2-09d3d2eb65ce)
+Screenshots of your app and/or a link to your live demo
+<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+![WhatsApp Image 2023-05-30 at 00 02 12](https://github.com/masumba/codementor-polling-mobile-app/assets/39776329/1b8de994-fba0-4c2d-97c2-09d3d2eb65ce)
 ![WhatsApp Image 2023-05-301 at 00 02 12](https://github.com/masumba/codementor-polling-mobile-app/assets/39776329/ee486955-6524-4ebf-94ff-b1f293a416c0)
 ![IMG-20230530-WA0005](https://github.com/masumba/codementor-polling-mobile-app/assets/39776329/3ce56607-d893-4b83-9a30-d82df03a3ec9)
 ![IMG-20230530-WA0010](https://github.com/masumba/codementor-polling-mobile-app/assets/39776329/594c2fcc-7f8f-44b2-8689-ea0310d5c2ff)
@@ -17,7 +19,7 @@ Screenshots of your app and/or a link to your live demo![WhatsApp Image 2023-05-
 ![IMG-20230530-WA0002](https://github.com/masumba/codementor-polling-mobile-app/assets/39776329/158a7a14-5267-4b1c-a9f2-1100d6ab8371)
 ![IMG-20230530-WA0003](https://github.com/masumba/codementor-polling-mobile-app/assets/39776329/c284bdb7-5bdd-47b8-8ed0-fe97a505e734)
 ![IMG-20230530-WA0004](https://github.com/masumba/codementor-polling-mobile-app/assets/39776329/1a0854d3-0043-4982-ab1a-2dc7ed36e3cc)
-
+</div>
 
 ## Installation
 
