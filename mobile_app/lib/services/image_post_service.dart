@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:logger/logger.dart';
 import 'package:mobile_app/exceptions/invalid_procedure_exception.dart';
 import 'package:mobile_app/exceptions/resource_missing_exception.dart';
+import 'package:mobile_app/models/image_post_record_dto.dart';
 import 'package:mobile_app/service_locator.dart';
 import 'package:mobile_app/services/authentication_service.dart';
 import 'package:uuid/uuid.dart';
@@ -117,7 +118,7 @@ class ImagePostService {
     }
   }
 
-  Stream<List<Map<String, dynamic>>> getCollectionDataStream({String? userId}) {
+  Stream<List<ImagePostRecordDto>> getCollectionDataStream({String? userId}) {
     if (userId == null) {
       throw ResourceMissingException('Failed to get user UUID');
     }
@@ -125,7 +126,7 @@ class ImagePostService {
 
     // Return a stream that emits a new list of user documents and their subCollections every time any of them changes
     return collection.snapshots().asyncMap((snapshot) async {
-      List<Map<String, dynamic>> results = [];
+      List<ImagePostRecordDto> results = [];
       for (var userDocument in snapshot.docs) {
         var subCollectionRef =
             userDocument.reference.collection(_userCollection);
@@ -153,16 +154,16 @@ class ImagePostService {
             }
           }
 
-          results.add({
-            'userReference': userDocument.id,
-            'imageUrl': subCollectionDocument.get('imageUrl'),
-            'description': subCollectionDocument.get('description'),
-            'positiveVotes': positiveCount,
-            'negativeVotes': negativeCount,
-            'userHasVoted': userHasVoted,
-            'userVote': userVote,
-            'uploadReference': subCollectionDocument.reference,
-          });
+          results.add(ImagePostRecordDto(
+            userReference: userDocument.id,
+            imageUrl: subCollectionDocument.get('imageUrl'),
+            description: subCollectionDocument.get('description'),
+            positiveVotes: positiveCount,
+            negativeVotes: negativeCount,
+            userHasVoted: userHasVoted,
+            userVote: userVote,
+            uploadReference: subCollectionDocument.reference,
+          ));
         }
       }
       return results;

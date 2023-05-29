@@ -1,13 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile_app/models/image_post_record_dto.dart';
 import 'package:mobile_app/utils/screen_util.dart';
 import 'package:mobile_app/views/home/home_view_model.dart';
 import 'package:mobile_app/widgets/cards/notice_card.dart';
 import 'package:mobile_app/widgets/cards/polling_image_card.dart';
 import 'package:mobile_app/widgets/cards/votable_polling_image_item_card.dart';
 import 'package:mobile_app/widgets/loading_progress.dart';
-import 'package:mobile_app/widgets/swipe_image_gallery.dart';
 import 'package:stacked/stacked.dart';
 
 class ImagePostViewerTab extends StatefulWidget {
@@ -21,11 +19,11 @@ class _ImagePostViewerTabState extends State<ImagePostViewerTab> {
   @override
   Widget build(BuildContext context) {
     var model = getParentViewModel<HomeViewModel>(context);
-    return StreamBuilder<List<ImagePostRecordDto>>(
+    return StreamBuilder<List<Map<String, dynamic>>>(
       stream: model.imagePostService
           .getCollectionDataStream(userId: model.authUserId),
       builder: (BuildContext context,
-          AsyncSnapshot<List<ImagePostRecordDto>> snapshot) {
+          AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
         if (snapshot.hasError) {
           model.logger.e(snapshot.error);
           model.logger.wtf(snapshot.stackTrace);
@@ -53,27 +51,8 @@ class _ImagePostViewerTabState extends State<ImagePostViewerTab> {
                 message: 'No records have been found.',
               );
             }
-            return SizedBox(
-              height: ScreenUtil.screenHeight(
-                    context,
-                    withoutStatusSafeAreaAndToolbar: true,
-                  ) *
-                  0.86,
-              child: SwipeImageGallery(
-                onUpVote: (ImagePostRecordDto dto) {
-                  model.vote(
-                    uploadReference: dto.uploadReference,
-                    positive: true,
-                  );
-                },
-                onDownVote: (ImagePostRecordDto dto) {
-                  model.vote(
-                    uploadReference: dto.uploadReference,
-                    positive: false,
-                  );
-                },
-                children: snapshot.data ?? [],
-              ),
+            return _PollingImageCardListBlock(
+              snapshotData: snapshot.data ?? [],
             );
         }
       },
@@ -82,7 +61,7 @@ class _ImagePostViewerTabState extends State<ImagePostViewerTab> {
 }
 
 class _PollingImageCardListBlock extends StatelessWidget {
-  final List<ImagePostRecordDto> snapshotData;
+  final List<Map<String, dynamic>> snapshotData;
   const _PollingImageCardListBlock({Key? key, required this.snapshotData})
       : super(key: key);
 
@@ -108,25 +87,25 @@ class _PollingImageCardListBlock extends StatelessWidget {
           shrinkWrap: true,
           children: snapshotData.map((map) {
             return VotablePollingImageItemCard(
-              username: map.userReference,
-              url: map.imageUrl,
-              description: map.description,
-              voteResult: map.userVote,
+              username: map['userReference'],
+              url: map['imageUrl'],
+              description: map['description'],
+              voteResult: map['userVote'],
               onUpVote: () {
                 model.vote(
-                  uploadReference: map.uploadReference,
+                  uploadReference: map['uploadReference'],
                   positive: true,
                 );
               },
               onDownVote: () {
                 model.vote(
-                  uploadReference: map.uploadReference,
+                  uploadReference: map['uploadReference'],
                   positive: false,
                 );
               },
-              upVotes: map.positiveVotes,
-              downVotes: map.negativeVotes,
-              canVote: !map.userHasVoted,
+              upVotes: map['positiveVotes'],
+              downVotes: map['negativeVotes'],
+              canVote: !map['userHasVoted'],
             );
           }).toList(),
         ),
