@@ -13,7 +13,7 @@ Screenshots of app
 <table>
   <tr>
     <td>
-      <img src="https://github.com/masumba/codementor-polling-mobile-app/assets/39776329/1b8de994-fba0-4c2d-97c2-09d3d2eb65ce" alt="Image 1" style="width: 250px;"/>
+      <img src="https://github.com/masumba/codementor-polling-mobile-app/assets/39776329/eb3f01c9-6019-4f64-977e-194006b7f87c" alt="Image 1" style="width: 250px;"/>
     </td>
     <td>
       <img src="https://github.com/masumba/codementor-polling-mobile-app/assets/39776329/ee486955-6524-4ebf-94ff-b1f293a416c0" alt="Image 2" style="width: 250px;"/>
