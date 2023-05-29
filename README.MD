@@ -27,10 +27,10 @@ Screenshots of app
       <img src="https://github.com/masumba/codementor-polling-mobile-app/assets/39776329/28c9a81a-916e-458c-ada3-838f69b8f58d" alt="Image 4" style="width: 250px;"/>
     </td>
     <td>
-      <img src="https://github.com/masumba/codementor-polling-mobile-app/assets/39776329/6066e209-4057-4c47-8808-87e5d2e6011a" alt="Image 4" style="width: 250px;"/>
+      <img src="https://github.com/masumba/codementor-polling-mobile-app/assets/39776329/5d545491-7b0a-45e2-a1a3-9352473abe8e" alt="Image 4" style="width: 250px;"/>
     </td>
     <td>
-      <img src="https://github.com/masumba/codementor-polling-mobile-app/assets/39776329/c96913db-f098-4594-b155-3d3cacebb3e0" alt="Image 4" style="width: 250px;"/>
+      <img src="https://github.com/masumba/codementor-polling-mobile-app/assets/39776329/41381a2b-4034-4410-9c62-1086235c141f" alt="Image 4" style="width: 250px;"/>
     </td>
   </tr>
   <tr>
