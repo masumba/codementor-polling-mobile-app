@@ -41,6 +41,18 @@ class _SwipeImageGalleryState extends State<SwipeImageGallery> {
     return Colors.white;
   }
 
+  Color getVoteButtonColor({bool isUpVote = false}) {
+    var value = widget.children[_currentIndex].userVote;
+    if (value != null) {
+      if (value && isUpVote) {
+        return Colors.green;
+      } else if (!value && !isUpVote) {
+        return Colors.red;
+      }
+    }
+    return Colors.white;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -84,14 +96,14 @@ class _SwipeImageGalleryState extends State<SwipeImageGallery> {
                           children: [
                             IconButton(
                               icon: const Icon(Icons.thumb_up),
-                              color: Colors.white,
+                              color: getVoteButtonColor(isUpVote: true),
                               onPressed: () {
                                 widget.onUpVote(widget.children[index]);
                               },
                             ),
                             IconButton(
                               icon: const Icon(Icons.thumb_down),
-                              color: Colors.white,
+                              color: getVoteButtonColor(),
                               onPressed: () {
                                 widget.onDownVote(widget.children[index]);
                               },
