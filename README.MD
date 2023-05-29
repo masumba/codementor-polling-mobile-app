@@ -16,15 +16,15 @@ Screenshots of app
       <img src="https://github.com/masumba/codementor-polling-mobile-app/assets/39776329/eb3f01c9-6019-4f64-977e-194006b7f87c" alt="Image 1" style="width: 250px;"/>
     </td>
     <td>
-      <img src="https://github.com/masumba/codementor-polling-mobile-app/assets/39776329/ee486955-6524-4ebf-94ff-b1f293a416c0" alt="Image 2" style="width: 250px;"/>
+      <img src="https://github.com/masumba/codementor-polling-mobile-app/assets/39776329/f68ab920-f18b-4bca-b139-97ff5602c473" alt="Image 2" style="width: 250px;"/>
     </td>
     <td>
-      <img src="https://github.com/masumba/codementor-polling-mobile-app/assets/39776329/3ce56607-d893-4b83-9a30-d82df03a3ec9" alt="Image 3" style="width: 250px;"/>
+      <img src="https://github.com/masumba/codementor-polling-mobile-app/assets/39776329/f5a1b392-8d61-45cc-89ed-3189d0754e5e" alt="Image 3" style="width: 250px;"/>
     </td>
   </tr>
   <tr>
     <td>
-      <img src="https://github.com/masumba/codementor-polling-mobile-app/assets/39776329/594c2fcc-7f8f-44b2-8689-ea0310d5c2ff" alt="Image 4" style="width: 250px;"/>
+      <img src="https://github.com/masumba/codementor-polling-mobile-app/assets/39776329/28c9a81a-916e-458c-ada3-838f69b8f58d" alt="Image 4" style="width: 250px;"/>
     </td>
     <td>
       <img src="https://github.com/masumba/codementor-polling-mobile-app/assets/39776329/6066e209-4057-4c47-8808-87e5d2e6011a" alt="Image 4" style="width: 250px;"/>
