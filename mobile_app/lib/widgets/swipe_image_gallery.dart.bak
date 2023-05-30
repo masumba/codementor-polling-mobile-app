@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:infinity_page_view_astro/infinity_page_view_astro.dart';
 import 'package:mobile_app/constants/app_image.dart';
 import 'package:mobile_app/models/image_post_record_dto.dart';
 import 'package:mobile_app/widgets/loading_progress.dart';
@@ -24,8 +23,6 @@ class SwipeImageGallery extends StatefulWidget {
 
 class _SwipeImageGalleryState extends State<SwipeImageGallery> {
   int _currentIndex = 0;
-  InfinityPageController infinityPageController =
-      InfinityPageController(initialPage: 0);
 
   double get votePercentage {
     if (widget.children[_currentIndex].positiveVotes == 0 &&
@@ -72,7 +69,7 @@ class _SwipeImageGalleryState extends State<SwipeImageGallery> {
             onDoubleTap: () {
               widget.onUpVote(widget.children[_currentIndex]);
             },
-            child: InfinityPageView(
+            child: PageView.builder(
               itemCount: widget.children.length,
               itemBuilder: (BuildContext context, int index) {
                 return Stack(
@@ -160,7 +157,7 @@ class _SwipeImageGalleryState extends State<SwipeImageGallery> {
                   _currentIndex = index;
                 });
               },
-              controller: infinityPageController,
+              controller: PageController(initialPage: _currentIndex),
             ),
           ),
         ),
